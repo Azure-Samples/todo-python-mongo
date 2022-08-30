@@ -10,6 +10,6 @@ services:
     language: js
     host: appservice
   api:
-    project: src/api
+    project: ../../api/python
     language: py
     host: appservice
