@@ -1,9 +1,10 @@
-param location string
+param environmentName string
+param location string = resourceGroup().location
 param principalId string = ''
-param resourceToken string
-param tags object
 
-var abbrs = loadJsonContent('../abbreviations.json')
+var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
+var tags = { 'azd-env-name': environmentName }
+var abbrs = loadJsonContent('../../abbreviations.json')
 
 resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: '${abbrs.keyVaultVaults}${resourceToken}'
@@ -22,4 +23,5 @@ resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   }
 }
 
+output AZURE_KEY_VAULT_NAME string = keyVault.name
 output AZURE_KEY_VAULT_ENDPOINT string = keyVault.properties.vaultUri

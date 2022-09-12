@@ -28,6 +28,7 @@ The following prerequisites are required to use this application. Please ensure 
 - [Node.js with npm (16.13.1+)](https://nodejs.org/) - for the Web frontend
 - [Git (2.36.1+)](https://git-scm.com/)
 
+
 ### Quickstart
 
 The fastest way for you to get this application up and running on Azure is to use the `azd up` command. This single command will create and configure all necessary Azure resources - including access policies and roles for your account and service-to-service communication with Managed Identities.
