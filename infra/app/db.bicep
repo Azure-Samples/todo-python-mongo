@@ -19,7 +19,7 @@ param cosmosDatabaseName string = 'Todo'
 param keyVaultName string
 
 module cosmos '../core/database/cosmos-mongo-db.bicep' = {
-  name: 'cosmos-mongo-resources'
+  name: 'cosmos-mongo'
   params: {
     environmentName: environmentName
     location: location
