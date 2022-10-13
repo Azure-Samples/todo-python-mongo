@@ -37,7 +37,7 @@ module cosmos './app/db.bicep' = {
 }
 
 // Configure api to use cosmos
-module apiCosmosConfig './core/host/appservice-config-cosmos.bicep' = {
+module apiCosmosConfig './core/host/appservice/config/appservice-config-cosmos.bicep' = {
   name: 'api-cosmos-config'
   params: {
     appServiceName: api.outputs.API_NAME
@@ -48,7 +48,7 @@ module apiCosmosConfig './core/host/appservice-config-cosmos.bicep' = {
 }
 
 // Create an App Service Plan to group applications under the same payment plan and SKU
-module appServicePlan './core/host/appserviceplan.bicep' = {
+module appServicePlan './core/host/appservice/appserviceplan.bicep' = {
   name: 'appserviceplan'
   params: {
     environmentName: environmentName
