@@ -18,7 +18,7 @@ param collections array = [
 param cosmosDatabaseName string = 'Todo'
 param keyVaultName string
 
-module cosmos '../core/database/cosmos-mongo-db.bicep' = {
+module cosmos '../core/database/cosmos/mongo/cosmos-mongo-db.bicep' = {
   name: 'cosmos-mongo'
   params: {
     environmentName: environmentName
