@@ -23,6 +23,22 @@ module api './app/api.bicep' = {
     appServicePlanId: appServicePlan.outputs.appServicePlanId
     keyVaultName: keyVault.outputs.keyVaultName
     allowedOrigins: [ web.outputs.WEB_URI ]
+    appSettings: {
+      AZURE_COSMOS_CONNECTION_STRING_KEY: cosmos.outputs.cosmosConnectionStringKey
+      AZURE_COSMOS_DATABASE_NAME: cosmos.outputs.cosmosDatabaseName
+      AZURE_COSMOS_ENDPOINT: cosmos.outputs.cosmosEndpoint
+    }
+  }
+}
+
+// Give the API access to KeyVault
+module apiKeyVaultAccess './core/security/keyvault-access.bicep' = {
+  name: 'api-keyvault-access'
+  params: {
+    environmentName: environmentName
+    location: location
+    keyVaultName: keyVault.outputs.keyVaultName
+    principalId: api.outputs.API_IDENTITY_PRINCIPAL_ID
   }
 }
 
@@ -36,23 +52,15 @@ module cosmos './app/db.bicep' = {
   }
 }
 
-// Configure api to use cosmos
-module apiCosmosConfig './core/host/appservice-config-cosmos.bicep' = {
-  name: 'api-cosmos-config'
-  params: {
-    appServiceName: api.outputs.API_NAME
-    cosmosDatabaseName: cosmos.outputs.cosmosDatabaseName
-    cosmosConnectionStringKey: cosmos.outputs.cosmosConnectionStringKey
-    cosmosEndpoint: cosmos.outputs.cosmosEndpoint
-  }
-}
-
 // Create an App Service Plan to group applications under the same payment plan and SKU
-module appServicePlan './core/host/appserviceplan-sites.bicep' = {
+module appServicePlan './core/host/appserviceplan.bicep' = {
   name: 'appserviceplan'
   params: {
     environmentName: environmentName
     location: location
+    sku: {
+      name: 'B1'
+    }
   }
 }
 
