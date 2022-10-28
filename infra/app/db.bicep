@@ -23,7 +23,7 @@ module cosmos '../core/database/cosmos/mongo/cosmos-mongo-db.bicep' = {
   name: 'cosmos-mongo'
   params: {
     accountName: accountName
-    databaseName: databaseName
+    databaseName: !empty(databaseName) ? databaseName : 'Todo'
     location: location
     collections: collections
     keyVaultName: keyVaultName
