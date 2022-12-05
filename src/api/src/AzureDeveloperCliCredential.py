@@ -16,8 +16,8 @@ import six
 from azure.core.credentials import AccessToken
 from azure.core.exceptions import ClientAuthenticationError
 
-from .. import CredentialUnavailableError
-from .._internal.decorators import log_get_token
+from azure.identity import CredentialUnavailableError
+from azure.identity._internal.decorators import log_get_token
 
 CLI_NOT_FOUND = "Azure Developer CLI could not be found. Please visit https://aka.ms/azure-dev for installation instructions and then, once installed, authenticate to your Azure account using 'azd login'."
 COMMAND_LINE = "azd auth token --output json --scope {}"
@@ -36,7 +36,7 @@ class AzureDeveloperCliCredential(object):
 
     @log_get_token("AzureDeveloperCliCredential")
     def get_token(self, *scopes: str, **kwargs) -> AccessToken:
-        commandString = ' --scope '.join(*scopes)
+        commandString = ' --scope '.join(scopes)
         command = COMMAND_LINE.format(commandString)
         output = _run_command(command)
         token = parse_token(output)
@@ -51,7 +51,7 @@ class AzureDeveloperCliCredential(object):
 def parse_token(output):
     try:
         token = json.loads(output)
-        dt = datetime.strptime(token["expiresOn"], "%Y-%m-%d %H:%M:%S.%f")
+        dt = datetime.strptime(token["expiresOn"], "%Y-%m-%dT%H:%M:%SZ")
         if hasattr(dt, "timestamp"):
             # Python >= 3.3
             expires_on = dt.timestamp()
