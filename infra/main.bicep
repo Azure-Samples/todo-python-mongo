@@ -45,9 +45,9 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   tags: tags
 }
 
-// The initial, empty application frontend
-module webInitial './app/web.bicep' = {
-  name: 'web-initial'
+// The application frontend
+module web './app/web.bicep' = {
+  name: 'web'
   scope: rg
   params: {
     name: webName
@@ -69,7 +69,7 @@ module api './app/api.bicep' = {
     applicationInsightsName: monitoring.outputs.applicationInsightsName
     appServicePlanId: appServicePlan.outputs.id
     keyVaultName: keyVault.outputs.name
-    allowedOrigins: [ webInitial.outputs.SERVICE_WEB_URI ]
+    allowedOrigins: [ web.outputs.SERVICE_WEB_URI ]
     appSettings: {
       AZURE_COSMOS_CONNECTION_STRING_KEY: cosmos.outputs.connectionStringKey
       AZURE_COSMOS_DATABASE_NAME: cosmos.outputs.databaseName
