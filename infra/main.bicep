@@ -78,23 +78,18 @@ module api './app/api.bicep' = {
   }
 }
 
-// The completed application frontend with app settings
-module web './app/web.bicep' = {
-  name: 'web'
+// The application frontend app settings
+module webSettings './core/host/appservice-settings.bicep' = {
+  name: 'websettings'
   scope: rg
   params: {
     name: webName
-    location: location
-    tags: tags
-    applicationInsightsName: monitoring.outputs.applicationInsightsName
-    appServicePlanId: appServicePlan.outputs.id
     appSettings: {
-      REACT_APP_API_BASE_URL: api.outputs.SERVICE_API_URI
+      REACT_APP_API_BASE_URL: useAPIM ? apimApi.outputs.SERVICE_API_URI : api.outputs.SERVICE_API_URI
       REACT_APP_APPLICATIONINSIGHTS_CONNECTION_STRING: monitoring.outputs.applicationInsightsConnectionString
     }
   }
 }
-
 
 // Give the API access to KeyVault
 module apiKeyVaultAccess './core/security/keyvault-access.bicep' = {
