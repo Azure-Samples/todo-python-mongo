@@ -349,7 +349,7 @@ module apiConfig './app/website-config.bicep' = if (useAPIM) {
   name: 'apiconfig'
   scope: rg
   params: {
-    apimServiceId: apim.outputs.resourceId
+    apimServiceId: useAPIM ? apim.outputs.resourceId : ''
     apiName: apimApiName
     apiAppName: api.outputs.name
   }
