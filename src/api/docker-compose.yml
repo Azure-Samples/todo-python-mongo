@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./src/api
+      dockerfile: Dockerfile
+    ports:
+      - "8080:3100"
+    environment:
+      - AZURE_COSMOS_CONNECTION_STRING=mongodb://default_user:Admin100@documentdb:10260/?directConnection=true&serverSelectionTimeoutMS=2000&authMechanism=SCRAM-SHA-256&tls=true&tlsAllowInvalidCertificates=true&appName=mongosh+2.5.0
+      - AZURE_COSMOS_DATABASE_NAME=todo_db
+    depends_on:
+      - documentdb
+    networks:
+      - todo-network
+
+  documentdb:
+    image: documentdboss.azurecr.io/private-preview:0.0.1
+    ports:
+      - "10260:10260"
+    networks:
+      - todo-network
+    volumes:
+      - documentdb-data:/data/db
+
+networks:
+  todo-network:
+    driver: bridge
+
+volumes:
+  documentdb-data:

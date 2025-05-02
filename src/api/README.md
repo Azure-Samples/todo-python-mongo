@@ -6,8 +6,15 @@ Requirements:
 
 - Python (3.8+)
 
+**Recommended:** Install a Python [venv](https://docs.python.org/3/library/venv.html)
+
 ```bash
-$ pip install -r requirements.txt
+$ python3 -m venv .venv
+$ . .venv/bin/activate
+```
+
+```bash
+$ pip install -r src/api/requirements.txt
 ```
 
 Or
@@ -15,6 +22,29 @@ Or
 ```bash
 $ poetry install
 ```
+
+## Running with DocumentDB on local host
+
+Start the DoucmentDB Docker image:
+
+```bash
+$ docker run -dt -p 10260:10260 documentdboss.azurecr.io/private-preview-manifest:0.0.
+```
+**Note:** Check TBD for more configuration parameters
+
+Then set the `AZURE_COSMOS_CONNECTION_STRING` to the following value:
+```bash
+export AZURE_COSMOS_CONNECTION_STRING="mongodb://default_user:Admin100@localhost:10260/?directConnection=true&serverSelectionTimeoutMS=2000&authMechanism=SCRAM-SHA-256&tls=true&tlsAllowInvalidCertificates=true&appName=mongosh+2.5.0"
+```
+
+You might need to adjust the username `default_user` or the password `Admin100` or the port `10260` if you customized this
+when starting the docker container.
+
+There is also a docker-compose.file you cna use to run both containers. To do so:
+```bash
+$ docker-compose up
+```
+You then can access the todo application like noted in "Running in Docker"
 
 ## Running
 
