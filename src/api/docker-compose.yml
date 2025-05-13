@@ -17,7 +17,7 @@ services:
       - todo-network
 
   documentdb:
-    image: documentdboss.azurecr.io/private-preview:0.0.2
+    image: ghcr.io/microsoft/documentdb/documentdb-local:latest
     ports:
       - "10260:10260"
     environment:

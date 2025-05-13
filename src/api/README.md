@@ -28,7 +28,7 @@ $ poetry install
 Start the DoucmentDB Docker image:
 
 ```bash
-$ docker run -dt -p 10260:10260 documentdboss.azurecr.io/private-preview-manifest:0.0.
+$ docker run -dt -p 10260:10260 ghcr.io/microsoft/documentdb/documentdb-local:latest
 ```
 **Note:** Check TBD for more configuration parameters
 
