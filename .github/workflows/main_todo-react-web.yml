@@ -28,22 +28,22 @@ jobs:
         run: npm run build
         working-directory: src/web
 
-      - name: Check build folder exists
+      - name: Check dist folder exists
         run: |
-          if [ ! -d "src/web/build" ]; then
-            echo "Build folder not found! Build step failed."
+          if [ ! -d "src/web/dist" ]; then
+            echo "Dist folder not found! Build step failed."
             exit 1
           fi
 
-      - name: Zip build folder
-        run: zip -r build.zip build
+      - name: Zip dist folder
+        run: zip -r dist.zip dist
         working-directory: src/web
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: src/web/build.zip
+          path: src/web/dist.zip
 
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
@@ -51,7 +51,7 @@ jobs:
           name: node-app
 
       - name: Unzip artifact for deployment
-        run: unzip build.zip
+        run: unzip dist.zip
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -65,4 +65,4 @@ jobs:
         with:
           app-name: 'todo-react-web'
           slot-name: 'Production'
-          package: build
+          package: dist
