@@ -1,0 +1,69 @@
+name: Build and deploy React app to Azure Web App - todo-react-web
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: src/web
+
+      - name: Build
+        run: npm run build
+        working-directory: src/web
+
+      - name: Check dist folder exists
+        run: |
+          if [ ! -d "src/web/dist" ]; then
+            echo "Dist folder not found! Build step failed."
+            exit 1
+          fi
+
+      - name: Zip dist folder
+        run: zip -r dist.zip dist
+        working-directory: src/web
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-app
+          path: src/web/dist.zip
+
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: node-app
+
+      - name: Unzip artifact for deployment
+        run: unzip dist.zip
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_1E12482F18E24062ADAA1F4BD6B29335 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_ece2a6d0-196f-4c93-8e47-500e4840b982 }}
+          subscription-id: 8abd0445-b3d6-4d34-a163-810585813e7e
+
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'todo-react-web'
+          slot-name: 'Production'
+          package: dist
