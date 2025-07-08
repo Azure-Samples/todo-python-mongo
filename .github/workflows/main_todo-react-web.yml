@@ -28,6 +28,13 @@ jobs:
         run: npm run build
         working-directory: src/web
 
+      - name: Check build folder exists
+        run: |
+          if [ ! -d "src/web/build" ]; then
+            echo "Build folder not found! Build step failed."
+            exit 1
+          fi
+
       - name: Zip build folder
         run: zip -r build.zip build
         working-directory: src/web
