@@ -1,0 +1,36 @@
+version: '3.8'
+
+# to have custom username/passwd run `DOCUMENT_DB_USERNAME=my_custom_user DOCUMENT_DB_PASSWORD=my_secure_password docker-compose up`
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:3100"
+    environment:
+      - AZURE_COSMOS_CONNECTION_STRING=mongodb://${DOCUMENT_DB_USERNAME:-todo_admin}:${DOCUMENT_DB_PASSWORD:-Admin100}@documentdb:10260/?directConnection=true&serverSelectionTimeoutMS=2000&authMechanism=SCRAM-SHA-256&tls=true&tlsAllowInvalidCertificates=true&appName=todo-app
+      - AZURE_COSMOS_DATABASE_NAME=todo_db
+    depends_on:
+      - documentdb
+    networks:
+      - todo-network
+
+  documentdb:
+    image: ghcr.io/microsoft/documentdb/documentdb-local:latest
+    ports:
+      - "10260:10260"
+    environment:
+      - USERNAME=${DOCUMENT_DB_USERNAME:-todo_admin}
+      - PASSWORD=${DOCUMENT_DB_PASSWORD:-Admin100}
+    networks:
+      - todo-network
+    volumes:
+      - documentdb-data:/data/db
+
+networks:
+  todo-network:
+    driver: bridge
+
+volumes:
+  documentdb-data:
