@@ -18,6 +18,9 @@ description: A complete ToDo app with Python FastAPI and Azure DocumentDB (with 
 ---
 <!-- YAML front-matter schema: https://review.learn.microsoft.com/en-us/help/contribute/samples/process/onboarding?branch=main#supported-metadata-fields-for-readmemd -->
 
+> [!WARNING]
+> This repository is archived and no longer maintained. For more Azure Developer CLI (`azd`) samples, visit [Awesome AZD](https://aka.ms/awesome-azd).
+
 # React Web App with Python API and MongoDB on Azure
 
 [![Open in GitHub Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github)](https://codespaces.new/azure-samples/todo-python-mongo)
